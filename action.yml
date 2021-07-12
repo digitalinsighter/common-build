@@ -1,0 +1,21 @@
+name: 'Common Build'
+description: 'Build something'
+inputs:
+  repo-to-build:
+    description: 'Input repo to build, eg: pingcap/tidb'
+    required: true
+    default: 'pingcap/tidb'
+outputs:
+  random-number:
+    description: "Random number"
+    value: ${{ steps.random-number-generator.outputs.random-id }}
+runs:
+  using: "composite"
+  steps:
+    - run: git clone "https://github.com/"${{ inputs.repo-to-build }}
+      shell: bash
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.13.1'
+    - run: cd tidb && make && ls ./bin
+      shell: bash
